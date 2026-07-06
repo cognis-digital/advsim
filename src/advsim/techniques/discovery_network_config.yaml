@@ -1,0 +1,26 @@
+id: discovery.network_config
+name: System Network Configuration Discovery
+attack_id: T1016
+attack_name: System Network Configuration Discovery
+tactic: Discovery
+description: >
+  Benignly emulates enumeration of local network configuration. advsim spawns a
+  read-only/echo-only network-info process (ipconfig/ifconfig placeholder) so
+  detections for network-configuration discovery can be validated. No network
+  configuration is read or changed beyond a benign labeled process spawn.
+platforms: [all]
+capabilities: [benign_process_spawn, read_only_query, log_event]
+expected_telemetry:
+  - "Process creation for a network-config discovery utility (ipconfig / ifconfig)"
+simulate:
+  - action: spawn_benign_process
+    binary: ipconfig
+  - action: spawn_benign_process
+    binary: ifconfig
+  - action: log_event
+    message: "emulated T1016 network configuration discovery"
+cleanup:
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1016/

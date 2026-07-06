@@ -1,0 +1,25 @@
+id: discovery.process
+name: Process Discovery
+attack_id: T1057
+attack_name: Process Discovery
+tactic: Discovery
+description: >
+  Benignly emulates an adversary listing running processes (tasklist / ps).
+  advsim spawns the read-only process-listing utility so detections for process
+  enumeration can be validated. Read-only; nothing is killed or modified.
+platforms: [all]
+capabilities: [benign_process_spawn, read_only_query, log_event]
+expected_telemetry:
+  - "Process creation for tasklist (Windows) or ps (Linux/macOS)"
+simulate:
+  - action: spawn_benign_process
+    binary: tasklist
+  - action: spawn_benign_process
+    binary: ps
+  - action: log_event
+    message: "emulated T1057 process discovery"
+cleanup:
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1057/

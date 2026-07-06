@@ -1,0 +1,29 @@
+id: discovery.system_info
+name: System Information Discovery
+attack_id: T1082
+attack_name: System Information Discovery
+tactic: Discovery
+description: >
+  Benignly emulates an adversary enumerating system information. advsim reads
+  non-sensitive platform metadata and spawns a read-only discovery process
+  (e.g. `ver`/`uname`) so host-telemetry detections for system enumeration can
+  be validated. No changes are made to the host.
+platforms: [all]
+capabilities: [local_enumeration, benign_process_spawn, read_only_query, log_event]
+expected_telemetry:
+  - "Process creation event for a system-info discovery binary (ver / uname / systeminfo)"
+  - "Short-lived read-only process spawned by the advsim runner"
+simulate:
+  - action: enumerate_environment
+    keys: [PATH, PROCESSOR_ARCHITECTURE, OS, SHELL]
+  - action: spawn_benign_process
+    binary: systeminfo
+  - action: spawn_benign_process
+    binary: uname
+  - action: log_event
+    message: "emulated T1082 system information discovery"
+cleanup:
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1082/

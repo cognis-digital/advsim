@@ -1,0 +1,28 @@
+id: persistence.startup_folder
+name: Startup Folder Marker Persistence (emulated)
+attack_id: T1547.001
+attack_name: "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"
+tactic: Persistence
+description: >
+  Benignly emulates dropping an autostart artifact into a startup location.
+  advsim writes a labeled marker file inside its sandbox that stands in for the
+  startup-folder shortcut an adversary would drop, so file-creation-in-startup
+  detections can be validated without touching the real startup folder.
+platforms: [all]
+capabilities: [sandbox_file_write, log_event]
+expected_telemetry:
+  - "File creation in a Startup folder (in a real intrusion)"
+  - "For this emulation: a sandbox marker representing the startup artifact"
+simulate:
+  - action: write_marker_file
+    path: "startup/advsim-autostart.lnk.marker"
+    content: "emulated startup-folder autostart artifact (benign)"
+  - action: log_event
+    message: "emulated startup-folder persistence artifact (sandbox marker only)"
+cleanup:
+  - action: delete_marker_file
+    path: "startup/advsim-autostart.lnk.marker"
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1547/001/

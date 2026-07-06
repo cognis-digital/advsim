@@ -1,0 +1,24 @@
+id: full_killchain
+name: End-to-end benign kill chain
+description: >
+  A broad purple-team exercise spanning discovery, execution, persistence,
+  credential-access (decoy), collection/staging, defense-evasion, C2 and an
+  exfiltration-pattern emulation. Every step is benign, sandbox-scoped and
+  reversible. Use it as a smoke test that your telemetry pipeline captures each
+  ATT&CK tactic.
+techniques:
+  - discovery.system_info
+  - discovery.account
+  - discovery.process
+  - discovery.file_and_directory
+  - execution.command_shell
+  - persistence.registry_run_key
+  - persistence.scheduled_task
+  - credential_access.file_access_marker
+  - collection.local_staging
+  - defense_evasion.masquerading
+  - defense_evasion.indicator_removal
+  - c2.dns_lookup
+  - exfiltration.dns_pattern
+references:
+  - https://attack.mitre.org/

@@ -1,0 +1,16 @@
+id: recon_and_beacon
+name: Discovery then C2 Beacon
+description: >
+  A common early-intrusion chain: host discovery followed by a C2 beacon. Emulates
+  system/user/network discovery, then a benign DNS lookup and a beacon-style
+  outbound connection to non-routable sink hosts. Use it to validate that your
+  detections correlate reconnaissance with subsequent suspicious egress.
+techniques:
+  - discovery.system_info
+  - discovery.account
+  - discovery.network_config
+  - c2.dns_lookup
+  - c2.beacon_connect
+references:
+  - https://attack.mitre.org/tactics/TA0007/
+  - https://attack.mitre.org/tactics/TA0011/

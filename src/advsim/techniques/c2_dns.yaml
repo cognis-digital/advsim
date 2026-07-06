@@ -1,0 +1,25 @@
+id: c2.dns_lookup
+name: Application Layer Protocol - DNS (emulated beacon)
+attack_id: T1071.004
+attack_name: "Application Layer Protocol: DNS"
+tactic: Command and Control
+description: >
+  Benignly emulates DNS-based C2 by issuing a DNS lookup for a NON-ROUTABLE
+  documentation/sink hostname (RFC 2606 / RFC 6761). advsim never contacts a real
+  C2 server; the point is to generate the DNS-query telemetry a detection for
+  suspicious lookups would catch. The host is validated against the sink allow-list.
+platforms: [all]
+capabilities: [dns_lookup_sink, log_event]
+expected_telemetry:
+  - "Outbound DNS query for an unusual / newly-seen domain"
+  - "DNS resolver / EDR record of a lookup to a documentation sink domain"
+simulate:
+  - action: dns_lookup
+    host: "advsim-c2-emulation.example.com"
+  - action: log_event
+    message: "emulated T1071.004 DNS C2 lookup to sink host"
+cleanup:
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1071/004/

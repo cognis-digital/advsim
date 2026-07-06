@@ -1,0 +1,39 @@
+id: collection.local_staging
+name: Data Staged - Local Data Staging (emulated)
+attack_id: T1074.001
+attack_name: "Data Staged: Local Data Staging"
+tactic: Collection
+description: >
+  Benignly emulates staging collected data in a local directory prior to
+  exfiltration. advsim creates a sandbox "staging" folder and writes benign
+  marker files into it, generating the file-write-to-staging-directory telemetry
+  a detection would key on. NO real data is collected and NOTHING is ever
+  exfiltrated — advsim has no exfiltration capability by design.
+platforms: [all]
+capabilities: [sandbox_file_write, log_event]
+expected_telemetry:
+  - "Creation of a staging directory and multiple files written into it"
+  - "Bulk file writes into a single directory (archive/staging pattern)"
+simulate:
+  - action: write_marker_file
+    path: "staging/collected_1.marker"
+    content: "benign staged marker 1 (no real data)"
+  - action: write_marker_file
+    path: "staging/collected_2.marker"
+    content: "benign staged marker 2 (no real data)"
+  - action: write_marker_file
+    path: "staging/collected_3.marker"
+    content: "benign staged marker 3 (no real data)"
+  - action: log_event
+    message: "emulated T1074.001 local data staging (benign markers only)"
+cleanup:
+  - action: delete_marker_file
+    path: "staging/collected_1.marker"
+  - action: delete_marker_file
+    path: "staging/collected_2.marker"
+  - action: delete_marker_file
+    path: "staging/collected_3.marker"
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1074/001/

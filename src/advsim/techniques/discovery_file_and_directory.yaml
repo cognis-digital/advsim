@@ -1,0 +1,36 @@
+id: discovery.file_and_directory
+name: File and Directory Discovery
+attack_id: T1083
+attack_name: File and Directory Discovery
+tactic: Discovery
+description: >
+  Benignly emulates an adversary enumerating the filesystem. advsim writes a few
+  sandbox marker files and then reads them back, generating the read/enumerate
+  file telemetry a detection for reconnaissance file access keys on. All activity
+  is confined to the sandbox; no real user files are read.
+platforms: [all]
+capabilities: [sandbox_file_write, read_only_query, log_event]
+expected_telemetry:
+  - "Directory enumeration / repeated file-read events over a directory tree"
+simulate:
+  - action: write_marker_file
+    path: "recon/file_a.txt"
+    content: "benign recon marker a"
+  - action: write_marker_file
+    path: "recon/file_b.txt"
+    content: "benign recon marker b"
+  - action: read_file
+    path: "recon/file_a.txt"
+  - action: read_file
+    path: "recon/file_b.txt"
+  - action: log_event
+    message: "emulated T1083 file and directory discovery"
+cleanup:
+  - action: delete_marker_file
+    path: "recon/file_a.txt"
+  - action: delete_marker_file
+    path: "recon/file_b.txt"
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1083/

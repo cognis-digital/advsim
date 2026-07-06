@@ -1,0 +1,29 @@
+id: persistence.scheduled_task
+name: Scheduled Task / Cron Persistence (emulated)
+attack_id: T1053.005
+attack_name: "Scheduled Task/Job: Scheduled Task"
+tactic: Persistence
+description: >
+  Benignly emulates scheduled-task / cron persistence. advsim does NOT register a
+  real scheduled task or crontab entry; it writes a sandbox JSON marker describing
+  the task an adversary would create, so detections keyed on task creation can be
+  designed and validated. Fully reversible.
+platforms: [all]
+capabilities: [sandbox_scheduled_task, log_event]
+expected_telemetry:
+  - "Scheduled task / cron creation event (in a real intrusion: schtasks.exe, at, cron)"
+  - "For this emulation: a sandbox marker describing the intended task"
+simulate:
+  - action: write_scheduled_task_marker
+    task_name: "advsim-benign-task"
+    schedule: "ONLOGON"
+    path: "scheduled_tasks/task.json"
+  - action: log_event
+    message: "emulated T1053.005 scheduled task persistence (sandbox marker only)"
+cleanup:
+  - action: delete_marker_file
+    path: "scheduled_tasks/task.json"
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1053/005/

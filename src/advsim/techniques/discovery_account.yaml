@@ -1,0 +1,24 @@
+id: discovery.account
+name: System Owner / User Discovery
+attack_id: T1033
+attack_name: System Owner/User Discovery
+tactic: Discovery
+description: >
+  Benignly emulates an adversary identifying the current user (e.g. `whoami`).
+  advsim spawns the read-only `whoami` process so process-creation detections
+  for user-context discovery can be validated. Read-only; no host changes.
+platforms: [all]
+capabilities: [benign_process_spawn, read_only_query, log_event]
+expected_telemetry:
+  - "Process creation event for whoami"
+  - "User-context discovery command execution"
+simulate:
+  - action: spawn_benign_process
+    binary: whoami
+  - action: log_event
+    message: "emulated T1033 system owner/user discovery"
+cleanup:
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1033/

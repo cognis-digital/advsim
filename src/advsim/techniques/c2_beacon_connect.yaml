@@ -1,0 +1,27 @@
+id: c2.beacon_connect
+name: Non-Standard Port Beacon (emulated)
+attack_id: T1571
+attack_name: Non-Standard Port
+tactic: Command and Control
+description: >
+  Benignly emulates an outbound C2 beacon by briefly attempting a TCP connection
+  to a NON-ROUTABLE documentation address (RFC 5737, 192.0.2.0/24) on a
+  non-standard port. The connection is expected to fail; the observable is the
+  outbound connection attempt itself. advsim validates the destination against the
+  sink allow-list and never reaches a real host.
+platforms: [all]
+capabilities: [network_connect_sink, log_event]
+expected_telemetry:
+  - "Outbound connection attempt to an unusual destination / non-standard port"
+  - "Firewall / EDR network-connection event to a documentation sink address"
+simulate:
+  - action: network_connect_sink
+    host: "192.0.2.1"
+    port: 8443
+  - action: log_event
+    message: "emulated T1571 non-standard port beacon to sink address"
+cleanup:
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1571/

@@ -1,0 +1,8 @@
+# advsim configuration (example).
+#
+# Copy to advsim.yaml in your working directory to grant authorization without
+# passing --authorized on every command.
+#
+# By setting authorized: true you attest that you are running advsim only
+# against systems you own or are explicitly authorized to test.
+authorized: false

@@ -1,0 +1,31 @@
+id: exfiltration.dns_pattern
+name: Exfiltration Over Alternative Protocol - DNS pattern (emulated)
+attack_id: T1048
+attack_name: Exfiltration Over Alternative Protocol
+tactic: Exfiltration
+description: >
+  Benignly emulates the DNS-query PATTERN of DNS-tunneling exfiltration by
+  issuing lookups for several long, encoded-looking subdomains of a NON-ROUTABLE
+  documentation domain. NO data ever leaves the host: the labels are static
+  placeholders, the domain is a sink, and advsim has no capability to read or
+  transmit real data. The point is to generate the high-entropy-subdomain DNS
+  telemetry a DNS-tunneling detection keys on.
+platforms: [all]
+capabilities: [dns_lookup_sink, log_event]
+expected_telemetry:
+  - "Repeated DNS queries with long / high-entropy subdomains to one parent domain"
+  - "DNS-tunneling heuristic triggers (subdomain length, query volume)"
+simulate:
+  - action: dns_lookup
+    host: "a1b2c3d4e5f6a7b8c9d0.advsim-exfil.example.com"
+  - action: dns_lookup
+    host: "f6e5d4c3b2a1098f7e6d.advsim-exfil.example.com"
+  - action: dns_lookup
+    host: "1122334455667788990a.advsim-exfil.example.com"
+  - action: log_event
+    message: "emulated T1048 DNS-pattern exfiltration to sink (no real data)"
+cleanup:
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1048/

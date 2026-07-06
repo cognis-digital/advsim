@@ -1,0 +1,28 @@
+id: defense_evasion.timestomp
+name: Timestomp (emulated, sandbox file)
+attack_id: T1070.006
+attack_name: "Indicator Removal: Timestomp"
+tactic: Defense Evasion
+description: >
+  Benignly emulates timestomping by writing a sandbox marker file and then
+  modifying ITS OWN timestamps within the sandbox. advsim only ever alters the
+  timestamps of a file it created inside its sandbox, so file-metadata-tampering
+  detections can be validated without touching any real file.
+platforms: [all]
+capabilities: [sandbox_file_write, log_event]
+expected_telemetry:
+  - "File timestamp modification event (SetFileTime / utime) on a monitored path"
+  - "For this emulation: mtime/atime change on a sandbox marker file"
+simulate:
+  - action: write_marker_file
+    path: "evasion/timestomp-target.txt"
+    content: "file whose timestamps will be benignly altered in-sandbox"
+  - action: log_event
+    message: "emulated T1070.006 timestomp on sandbox file"
+cleanup:
+  - action: delete_marker_file
+    path: "evasion/timestomp-target.txt"
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1070/006/

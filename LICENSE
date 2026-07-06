@@ -1,0 +1,26 @@
+Cognis Open Community License (COCL-1.0)
+
+Copyright (c) 2026 Cognis Digital
+
+Permission is hereby granted, free of charge, to any person or organization
+obtaining a copy of this software and associated documentation files (the
+"Software"), to use, copy, modify, merge, publish, and distribute the Software,
+subject to the following conditions:
+
+1. Authorized use only. The Software is an adversary-emulation and
+   detection-validation tool. You may use it only against systems that you own
+   or for which you have explicit, written authorization to conduct security
+   testing. You are solely responsible for ensuring your use is lawful and
+   authorized.
+
+2. The above copyright notice and this permission notice shall be included in
+   all copies or substantial portions of the Software.
+
+3. Attribution. Redistributions must retain attribution to Cognis Digital.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

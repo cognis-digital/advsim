@@ -1,0 +1,16 @@
+id: persistence_and_evasion
+name: Persistence then Defense Evasion
+description: >
+  Emulates an adversary establishing persistence (registry run key + scheduled
+  task + startup artifact) and then covering tracks (timestomp + indicator
+  removal). All artifacts are sandbox markers and are cleaned up. Use it to
+  validate autostart-creation and indicator-removal detections.
+techniques:
+  - persistence.registry_run_key
+  - persistence.scheduled_task
+  - persistence.startup_folder
+  - defense_evasion.timestomp
+  - defense_evasion.indicator_removal
+references:
+  - https://attack.mitre.org/tactics/TA0003/
+  - https://attack.mitre.org/tactics/TA0005/

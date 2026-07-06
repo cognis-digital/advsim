@@ -1,0 +1,30 @@
+id: persistence.registry_run_key
+name: Registry Run Key Persistence (emulated)
+attack_id: T1547.001
+attack_name: "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"
+tactic: Persistence
+description: >
+  Benignly emulates a Run-key autostart persistence write. advsim does NOT touch
+  the real registry or Startup folder; it writes a JSON marker under the sandbox
+  describing the key/value an adversary would set, so a purple team can craft and
+  test a detection against the documented artifact. Fully reversible.
+platforms: [all]
+capabilities: [sandbox_registry_write, log_event]
+expected_telemetry:
+  - "Registry value creation under HKCU/HKLM ...\\CurrentVersion\\Run (in a real intrusion)"
+  - "For this emulation: a sandbox marker file describing the intended autostart key"
+simulate:
+  - action: write_sandbox_registry_marker
+    key: "HKCU/Software/Microsoft/Windows/CurrentVersion/Run"
+    value_name: "advsim-benign-autostart"
+    value: "advsim-sandbox/benign-marker.txt"
+    path: "registry/run_key.json"
+  - action: log_event
+    message: "emulated T1547.001 registry run key persistence (sandbox marker only)"
+cleanup:
+  - action: delete_marker_file
+    path: "registry/run_key.json"
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1547/001/

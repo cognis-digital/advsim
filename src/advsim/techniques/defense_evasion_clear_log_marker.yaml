@@ -1,0 +1,29 @@
+id: defense_evasion.indicator_removal
+name: Indicator Removal - File Deletion (emulated)
+attack_id: T1070.004
+attack_name: "Indicator Removal: File Deletion"
+tactic: Defense Evasion
+description: >
+  Benignly emulates an adversary removing their own artifacts. advsim writes a
+  sandbox marker representing a dropped payload and then deletes THAT SANDBOX
+  FILE, generating the create-then-delete file telemetry a detection for
+  indicator removal keys on. advsim only ever deletes files it created in its
+  own sandbox; it never deletes any real file.
+platforms: [all]
+capabilities: [sandbox_file_write, log_event]
+expected_telemetry:
+  - "File creation followed shortly by deletion of the same path"
+  - "For this emulation: create + delete of a sandbox marker file"
+simulate:
+  - action: write_marker_file
+    path: "evasion/dropped-payload.marker"
+    content: "emulated dropped artifact to be self-deleted (benign)"
+  - action: delete_marker_file
+    path: "evasion/dropped-payload.marker"
+  - action: log_event
+    message: "emulated T1070.004 indicator removal (create+delete sandbox file)"
+cleanup:
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1070/004/

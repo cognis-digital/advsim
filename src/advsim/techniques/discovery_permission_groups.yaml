@@ -1,0 +1,25 @@
+id: discovery.permission_groups
+name: Permission Groups Discovery
+attack_id: T1069
+attack_name: Permission Groups Discovery
+tactic: Discovery
+description: >
+  Benignly emulates enumeration of group/permission membership. advsim spawns a
+  read-only identity utility (`id` on POSIX, `whoami` on Windows) so detections
+  for group-membership discovery can be validated. Read-only; no host changes.
+platforms: [all]
+capabilities: [benign_process_spawn, read_only_query, log_event]
+expected_telemetry:
+  - "Process creation for id / whoami (group membership enumeration)"
+simulate:
+  - action: spawn_benign_process
+    binary: id
+  - action: spawn_benign_process
+    binary: whoami
+  - action: log_event
+    message: "emulated T1069 permission groups discovery"
+cleanup:
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1069/

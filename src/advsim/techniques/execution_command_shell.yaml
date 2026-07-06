@@ -1,0 +1,25 @@
+id: execution.command_shell
+name: Command and Scripting Interpreter (benign)
+attack_id: T1059
+attack_name: Command and Scripting Interpreter
+tactic: Execution
+description: >
+  Benignly emulates execution via a command interpreter. advsim invokes a shell
+  to echo a clearly-labeled benign marker string, generating the process-creation
+  and command-line telemetry a detection for interpreter use would key on. The
+  command is validated against the destructive-pattern deny-list before running.
+platforms: [all]
+capabilities: [benign_process_spawn, log_event]
+expected_telemetry:
+  - "Process creation for cmd.exe / powershell.exe / sh with a benign command line"
+  - "Command-line telemetry containing the labeled advsim marker string"
+simulate:
+  - action: spawn_benign_process
+    binary: net_view
+  - action: log_event
+    message: "emulated T1059 command interpreter execution (benign echo)"
+cleanup:
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1059/

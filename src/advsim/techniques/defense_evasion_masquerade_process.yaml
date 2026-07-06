@@ -1,0 +1,29 @@
+id: defense_evasion.masquerading
+name: Masquerading - Renamed Utility (emulated)
+attack_id: T1036.003
+attack_name: "Masquerading: Rename System Utilities"
+tactic: Defense Evasion
+description: >
+  Benignly emulates masquerading by writing a sandbox marker representing a
+  system utility copied under a misleading name (e.g. a copy of a shell renamed
+  to look like a trusted process). advsim does NOT copy or execute any real
+  system binary; it records the intended rename in a sandbox marker so a detection
+  for renamed-utility execution can be designed and validated.
+platforms: [all]
+capabilities: [sandbox_file_write, log_event]
+expected_telemetry:
+  - "Execution of a known utility from an unexpected path / under an unexpected name"
+  - "For this emulation: a sandbox marker describing the intended masquerade"
+simulate:
+  - action: write_marker_file
+    path: "evasion/masquerade-svchost.exe.marker"
+    content: "emulated renamed-utility masquerade descriptor (benign, not executable)"
+  - action: log_event
+    message: "emulated T1036.003 masquerading via renamed utility (sandbox marker)"
+cleanup:
+  - action: delete_marker_file
+    path: "evasion/masquerade-svchost.exe.marker"
+  - action: delete_marker_file
+    path: activity.log
+references:
+  - https://attack.mitre.org/techniques/T1036/003/
